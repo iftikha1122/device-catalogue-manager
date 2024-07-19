@@ -33,6 +33,12 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(InvalidPartialUpdateException.class)
+    public ResponseEntity<ErrorResponse> handleInvalidPartialUpdateException(InvalidPartialUpdateException ex) {
+        ErrorResponse errorResponse = new ErrorResponse(ex.getMessage(),Map.of());
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+    }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleGlobalException(Exception ex, WebRequest request) {
         ErrorResponse errorResponse = new ErrorResponse(ex.getMessage(),Map.of());
