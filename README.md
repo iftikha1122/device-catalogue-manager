@@ -117,6 +117,51 @@ To switch to the in-memory storage version, follow these steps:
 
 Swagger/OpenAPI documentation is available at [http://localhost:8080/swagger-ui/index.html](http://localhost:8080/swagger-ui/index.html).
 
+### 1. Add a New Device
+
+**Endpoint**: `POST /devices`
+
+**Request**:
+
+```sh
+curl -X POST "http://localhost:8080/devices" \
+     -H "Content-Type: application/json" \
+     -d '{
+           "name": "New Device",
+           "brand": "BrandX"
+         }'
+         
+         
+curl -X GET "http://localhost:8080/devices"
+
+curl -X GET "http://localhost:8080/devices/1"
+
+curl -X GET "http://localhost:8080/devices/search?brand=BrandY"
+
+
+
+curl -X PUT "http://localhost:8080/devices/1" \
+     -H "Content-Type: application/json" \
+     -d '{
+           "name": "Updated Device",
+           "brand": "BrandY",
+           "creationTime": "2024-07-19T12:34:56"
+         }'
+         
+curl -X PATCH "http://localhost:8080/devices/1" \
+     -H "Content-Type: application/json" \
+     -d '{
+           "name": "Partially Updated Device"
+         }'
+         
+curl -X DELETE "http://localhost:8080/devices/1"
+
+         
+```
+
+
+
+
 ### Testing
 
 **Unit Tests**:
