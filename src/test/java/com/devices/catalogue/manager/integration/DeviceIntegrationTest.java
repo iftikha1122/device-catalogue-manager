@@ -1,6 +1,7 @@
 package com.devices.catalogue.manager.integration;
 
 import com.devices.catalogue.manager.dto.CreateRequestDto;
+import com.devices.catalogue.manager.dto.PartialUpdateRequestDto;
 import io.restassured.RestAssured;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -121,5 +122,53 @@ public class DeviceIntegrationTest {
                 .get("/devices/search")
                 .then()
                 .statusCode(HttpStatus.OK.value());
+    }
+
+
+    @Test
+    public void testPartialUpdateDevice() {
+        CreateRequestDto deviceDto = new CreateRequestDto();
+        deviceDto.setName("Integration Test Device");
+        deviceDto.setBrand("Integration Test Brand");
+
+        var response = given()
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .body(deviceDto)
+                .port(port)
+                .when()
+                .post("/devices")
+                .then()
+                .statusCode(HttpStatus.CREATED.value())
+                .extract().response();
+
+        Long deviceId = response.jsonPath().getLong("id");
+
+        PartialUpdateRequestDto partialUpdateDto = new PartialUpdateRequestDto();
+        partialUpdateDto.setName("Partially Updated Device Name");
+
+        // Partially update the device by ID
+        given()
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .body(partialUpdateDto)
+                .port(port)
+                .when()
+                .patch("/devices/" + deviceId)
+                .then()
+                .statusCode(HttpStatus.OK.value())
+                .body("name", equalTo("Partially Updated Device Name"))
+                .body("brand", equalTo("Integration Test Brand"));
+
+        // Test  invalid partial update
+        PartialUpdateRequestDto invalidPartialUpdateDto = new PartialUpdateRequestDto();
+
+        given()
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .body(invalidPartialUpdateDto)
+                .port(port)
+                .when()
+                .patch("/devices/" + deviceId)
+                .then()
+                .statusCode(HttpStatus.BAD_REQUEST.value())
+                .body("message", equalTo("At least one field must be provided for partial update"));
     }
 }

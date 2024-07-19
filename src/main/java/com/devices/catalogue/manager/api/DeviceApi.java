@@ -4,6 +4,7 @@ package com.devices.catalogue.manager.api;
 
 import com.devices.catalogue.manager.dto.CreateRequestDto;
 import com.devices.catalogue.manager.dto.DeviceResponseDTO;
+import com.devices.catalogue.manager.dto.PartialUpdateRequestDto;
 import com.devices.catalogue.manager.service.DeviceService;
 import io.swagger.annotations.Api;
 import io.swagger.v3.oas.annotations.Operation;
@@ -81,8 +82,8 @@ public class DeviceApi {
             @ApiResponse(responseCode = "400", description = "Invalid input")
     })
     @PatchMapping("/{id}")
-    public ResponseEntity<DeviceResponseDTO> partialUpdateDevice(@PathVariable Long id, @Valid @RequestBody CreateRequestDto createRequestDto) {
-        DeviceResponseDTO updatedDevice = deviceService.partialUpdateDevice(id, createRequestDto);
+    public ResponseEntity<DeviceResponseDTO> partialUpdateDevice(@PathVariable Long id, @Valid @RequestBody PartialUpdateRequestDto partialUpdateRequestDto ) {
+        DeviceResponseDTO updatedDevice = deviceService.partialUpdateDevice(id, partialUpdateRequestDto);
         return ResponseEntity.ok(updatedDevice);
     }
 
