@@ -4,12 +4,12 @@ import com.devices.catalogue.manager.domain.Device;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
-
-@DataJpaTest
+@SpringBootTest
 public class DeviceRepositoryTest {
 
     @Autowired

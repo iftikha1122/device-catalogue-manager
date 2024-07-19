@@ -1,7 +1,5 @@
 package com.devices.catalogue.manager.domain;
 
-
-
 import com.devices.catalogue.manager.dto.CreateRequestDto;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -15,7 +13,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 import java.util.Optional;
 
-@Entity
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -23,14 +20,12 @@ import java.util.Optional;
 public class Device {
     private final static DateTimeFormatter DATE_TIME_FORMAT = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String name;
 
     private String brand;
-    @Column(name = "create_date")
+
     private LocalDateTime creationTime;
 
 
