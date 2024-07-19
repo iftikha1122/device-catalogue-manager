@@ -4,8 +4,10 @@ package com.devices.catalogue.manager.service;
 
 import com.devices.catalogue.manager.dto.CreateRequestDto;
 import com.devices.catalogue.manager.dto.DeviceResponseDTO;
+import com.devices.catalogue.manager.dto.PartialUpdateRequestDto;
 import com.devices.catalogue.manager.exceptions.DeviceNotFoundException;
 import com.devices.catalogue.manager.domain.Device;
+import com.devices.catalogue.manager.exceptions.InvalidPartialUpdateException;
 import com.devices.catalogue.manager.repositories.DeviceRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -54,18 +56,30 @@ public class DeviceService {
         return DeviceResponseDTO.fromEntity(updatedDevice);
     }
 
-    public DeviceResponseDTO partialUpdateDevice(Long id, CreateRequestDto createRequestDto) {
-        log.info("Partially updating device with id: {}", id);
-        Device device = deviceRepository.findById(id).orElseThrow(() -> new DeviceNotFoundException(id));
-        if (createRequestDto.getName() != null) {
-            device.setName(createRequestDto.getName());
-        }
-        if (createRequestDto.getBrand() != null) {
-            device.setBrand(createRequestDto.getBrand());
-        }
-        Device updatedDevice = deviceRepository.save(device);
-        log.info("Device with id: {} partially updated successfully", id);
-        return DeviceResponseDTO.fromEntity(updatedDevice);
+
+    public DeviceResponseDTO partialUpdateDevice(Long id, PartialUpdateRequestDto dto) {
+        Device device = deviceRepository.findById(id)
+                .orElseThrow(() -> new DeviceNotFoundException(id));
+
+        boolean isUpdated = false;
+
+            if (dto.getName() != null && !dto.getName().isEmpty()) {
+                device.setName(dto.getName());
+                isUpdated = true;
+            }
+            if (dto.getBrand() != null && !dto.getBrand().isEmpty()) {
+                device.setBrand(dto.getBrand());
+                isUpdated = true;
+            }
+
+            if (!isUpdated) {
+                throw new InvalidPartialUpdateException();
+            }
+
+            device = deviceRepository.save(device);
+
+
+        return DeviceResponseDTO.fromEntity(device);
     }
 
     public void deleteDevice(Long id) {
